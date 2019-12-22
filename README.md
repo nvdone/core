@@ -1,2 +1,3 @@
 # core
-NVD Core Excel functions and commands
+
+Regular expressions for Microsoft Excel, commands to quickly switch a couple of "Options".

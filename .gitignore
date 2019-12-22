@@ -1,0 +1,7 @@
+/.vs/Core/v16
+/bin/Debug
+/bin/Release
+/obj/Debug
+/obj/Release
+/packages/ExcelDna.AddIn.1.0.0
+/packages/ExcelDna.Integration.1.0.0

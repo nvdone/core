@@ -73,6 +73,8 @@ namespace Core
 				{
 					return (decimal)row["Vcurs"] / (decimal)row["Vnom"];
 				}
+
+				((ICommunicationObject)cbr).Close();
 			}
 			catch { }
 

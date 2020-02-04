@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nikolay Dudkin")]
 [assembly: AssemblyProduct("NVD Core Excel functions and commands")]
-[assembly: AssemblyCopyright("Copyright © 2019, Nikolay Dudkin")]
-[assembly: AssemblyTrademark("Copyright © 2019, Nikolay Dudkin")]
+[assembly: AssemblyCopyright("Copyright © 2019-2020, Nikolay Dudkin")]
+[assembly: AssemblyTrademark("Copyright © 2019-2020, Nikolay Dudkin")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

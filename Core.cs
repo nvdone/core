@@ -28,14 +28,14 @@ namespace Core
 	{
 		private static ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>> cbrFXRateCache = new ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>>();
 
-		[ExcelFunction(Description = "RegExIsMatch")]
+		[ExcelFunction(Description = "RegExIsMatch", IsThreadSafe = true)]
 		public static bool RegExIsMatch(string input, string pattern)
 		{
 			Regex regex = new Regex(pattern);
 			return (regex.IsMatch(input));
 		}
 
-		[ExcelFunction(Description = "RegExMatch (string input, string pattern, int group = 0, int capture = 0)")]
+		[ExcelFunction(Description = "RegExMatch (string input, string pattern, int group = 0, int capture = 0)", IsThreadSafe = true)]
 		public static string RegExMatch(string input, string pattern, int group = 0, int capture = 0)
 		{
 			Regex regex = new Regex(pattern);
@@ -45,7 +45,7 @@ namespace Core
 			return match.Groups[group]?.Captures[capture]?.Value ?? "";
 		}
 
-		[ExcelFunction(Description = "RegExMatches (string input, string pattern, int match = 0, int group = 0, int capture = 0)")]
+		[ExcelFunction(Description = "RegExMatches (string input, string pattern, int match = 0, int group = 0, int capture = 0)", IsThreadSafe = true)]
 		public static string RegExMatches(string input, string pattern, int match = 0, int group = 0, int capture = 0)
 		{
 			Regex regex = new Regex(pattern);
@@ -57,14 +57,14 @@ namespace Core
 			return matches[match]?.Groups[group]?.Captures[capture]?.Value ?? "";
 		}
 
-		[ExcelFunction(Description = "RegExReplace( string input, string pattern, string replacement)")]
+		[ExcelFunction(Description = "RegExReplace( string input, string pattern, string replacement)", IsThreadSafe = true)]
 		public static string RegExReplace(string input, string pattern, string replacement)
 		{
 			Regex regex = new Regex(pattern);
 			return regex.Replace(input, replacement);
 		}
 
-		[ExcelFunction(Description = "GetCBRFXRate(DateTime date, string currency, bool bypassCache)")]
+		[ExcelFunction(Description = "GetCBRFXRate(DateTime date, string currency, bool bypassCache)", IsThreadSafe = true)]
 		public static decimal GetCBRFXRate(DateTime date, string currency, bool bypassCache = false)
 		{
 			decimal rate = 0;
@@ -72,11 +72,8 @@ namespace Core
 
 			try
 			{
-				if (!bypassCache)
-				{
-					if (cbrFXRateCache.ContainsKey(currency) && cbrFXRateCache[currency].ContainsKey(d))
-						return cbrFXRateCache[currency][d];
-				}
+				if (!bypassCache && cbrFXRateCache.ContainsKey(currency) && cbrFXRateCache[currency].ContainsKey(d))
+					return cbrFXRateCache[currency][d];
 
 				CBRWebService.DailyInfoSoapClient cbr = new CBRWebService.DailyInfoSoapClient(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"));
 
@@ -97,7 +94,7 @@ namespace Core
 			return rate;
 		}
 
-		[ExcelFunction(Description = "CoreAbout()")]
+		[ExcelFunction(Description = "CoreAbout()", IsThreadSafe = true)]
 		public static string CoreAbout()
 		{
 			Assembly executingAssembly = Assembly.GetExecutingAssembly();

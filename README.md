@@ -19,6 +19,11 @@ Replace a string or a sub-string in case there is a match.\
 \
 <b>decimal GetCBRFXRate(DateTime date, string currency)</b>\
 Get foreign exchange rate from http://www.cbr.ru. Date - date to obtain quotation for, currency - 3-character currency code.\
+<b>decimal GetCBRFXRate(DateTime date, string currency, bool bypassCache = false)</b>\
+Get foreign exchange rate from http://www.cbr.ru.\
+Date - date to obtain quotation for.\
+Currency - 3-character currency code.\
+BypassCache=true - a request to cbr.ru should be made at each function call, otherwise (by default) - cached values can be used.\
 \
 <b><u>Commands:</u></b>\
 \

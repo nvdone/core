@@ -15,6 +15,7 @@
 using ExcelDna.Integration;
 using Microsoft.Office.Interop.Excel;
 using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,8 @@ namespace Core
 {
 	public static class Core
 	{
+		private static ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>> cbrFXRateCache = new ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>>();
+
 		[ExcelFunction(Description = "RegExIsMatch")]
 		public static bool RegExIsMatch(string input, string pattern)
 		{
@@ -61,24 +64,37 @@ namespace Core
 			return regex.Replace(input, replacement);
 		}
 
-		[ExcelFunction(Description = "GetCBRFXRate(DateTime date, string currency)")]
-		public static decimal GetCBRFXRate(DateTime date, string currency)
+		[ExcelFunction(Description = "GetCBRFXRate(DateTime date, string currency, bool bypassCache)")]
+		public static decimal GetCBRFXRate(DateTime date, string currency, bool bypassCache = false)
 		{
+			decimal rate = 0;
+			DateTime d = date.Date;
+
 			try
 			{
+				if (!bypassCache)
+				{
+					if (cbrFXRateCache.ContainsKey(currency) && cbrFXRateCache[currency].ContainsKey(d))
+						return cbrFXRateCache[currency][d];
+				}
+
 				CBRWebService.DailyInfoSoapClient cbr = new CBRWebService.DailyInfoSoapClient(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"));
 
-				DataRow row = cbr.GetCursOnDate(date).Tables[0].Select().Where(r => r["VchCode"].Equals(currency)).FirstOrDefault();
+				DataRow row = cbr.GetCursOnDate(d).Tables[0].Select().Where(r => r["VchCode"].Equals(currency)).FirstOrDefault();
 				if (row != null)
 				{
-					return (decimal)row["Vcurs"] / (decimal)row["Vnom"];
+					rate = (decimal)row["Vcurs"] / (decimal)row["Vnom"];
 				}
 
 				((ICommunicationObject)cbr).Close();
+
+				if (!cbrFXRateCache.ContainsKey(currency))
+					cbrFXRateCache.TryAdd(currency, new ConcurrentDictionary<DateTime, decimal>());
+				cbrFXRateCache[currency].AddOrUpdate(d, rate, (olddate, oldrate) => rate);
 			}
 			catch { }
 
-			return 0;
+			return rate;
 		}
 
 		[ExcelFunction(Description = "CoreAbout()")]
@@ -111,6 +127,12 @@ namespace Core
 		{
 			Application excel = (Application)ExcelDnaUtil.Application;
 			excel.Application.EditDirectlyInCell = !excel.Application.EditDirectlyInCell;
+		}
+
+		[ExcelCommand(Description = "Clean CBR FX rate cache.")]
+		public static void ClearCBRFXRateCache()
+		{
+			cbrFXRateCache.Clear();
 		}
 	}
 }

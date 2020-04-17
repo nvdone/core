@@ -19,7 +19,9 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.ServiceModel;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Core
@@ -35,7 +37,7 @@ namespace Core
 			return (regex.IsMatch(input));
 		}
 
-		[ExcelFunction(Description = "RegExMatch (string input, string pattern, int group = 0, int capture = 0)", IsThreadSafe = true)]
+		[ExcelFunction(Description = "RegExMatch(string input, string pattern, int group = 0, int capture = 0)", IsThreadSafe = true)]
 		public static string RegExMatch(string input, string pattern, int group = 0, int capture = 0)
 		{
 			Regex regex = new Regex(pattern);
@@ -45,7 +47,7 @@ namespace Core
 			return match.Groups[group]?.Captures[capture]?.Value ?? "";
 		}
 
-		[ExcelFunction(Description = "RegExMatches (string input, string pattern, int match = 0, int group = 0, int capture = 0)", IsThreadSafe = true)]
+		[ExcelFunction(Description = "RegExMatches(string input, string pattern, int match = 0, int group = 0, int capture = 0)", IsThreadSafe = true)]
 		public static string RegExMatches(string input, string pattern, int match = 0, int group = 0, int capture = 0)
 		{
 			Regex regex = new Regex(pattern);
@@ -57,7 +59,7 @@ namespace Core
 			return matches[match]?.Groups[group]?.Captures[capture]?.Value ?? "";
 		}
 
-		[ExcelFunction(Description = "RegExReplace( string input, string pattern, string replacement)", IsThreadSafe = true)]
+		[ExcelFunction(Description = "RegExReplace(string input, string pattern, string replacement)", IsThreadSafe = true)]
 		public static string RegExReplace(string input, string pattern, string replacement)
 		{
 			Regex regex = new Regex(pattern);
@@ -92,6 +94,12 @@ namespace Core
 			catch { }
 
 			return rate;
+		}
+
+		[ExcelFunction(Description = "MD5Hash(string input)", IsThreadSafe = true)]
+		public static string MD5Hash(string input)
+		{
+			return string.Concat(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input)).Select(x => x.ToString("x2")));
 		}
 
 		[ExcelFunction(Description = "CoreAbout()", IsThreadSafe = true)]

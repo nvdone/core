@@ -23,6 +23,16 @@ Date - date to obtain quotation for.\
 Currency - 3-character currency code.\
 BypassCache=true - a request to cbr.ru should be made at each function call, otherwise (by default) - cached values can be used.\
 \
+<b>string MD5Hash(string input)</b>\
+Returns MD5 hash of the input string.\
+\
+<b>string TranslitRU(string input)</b>\
+Transliterates Russian-language string.\
+\
+<b>string TranslitUA(string input)</b>\
+Transliterates Ukrainian-language string with a simplified version of TransliterateRU's algorithm.\
+\
+\
 <b><u>Commands:</u></b>\
 \
 <b>SwitchReferenceStyle()</b>\
@@ -32,6 +42,7 @@ Switches "reference style" between "R1C1" and "A1".\
 Turns "precision as displayed" on and off.\
 \
 <b>SwitchAllowEditingDirectlyInCells()</b>\
-Turns "allow editing directly in cells" on and off.
-
-
+Turns "allow editing directly in cells" on and off.\
+\
+<b>ClearCBRFXRateCache()</b>\
+Clears cache of CBR FX rates.

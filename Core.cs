@@ -102,6 +102,18 @@ namespace Core
 			return string.Concat(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input)).Select(x => x.ToString("x2")));
 		}
 
+		[ExcelFunction(Description = "TranslitRU(string input)", IsThreadSafe = true)]
+		public static string TranslitRU(string input)
+		{
+			return new TranslitRU().Transliterate(input);
+		}
+
+		[ExcelFunction(Description = "TranslitUA(string input)", IsThreadSafe = true)]
+		public static string TranslitUA(string input)
+		{
+			return new TranslitUA().Transliterate(input);
+		}
+
 		[ExcelFunction(Description = "CoreAbout()", IsThreadSafe = true)]
 		public static string CoreAbout()
 		{

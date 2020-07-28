@@ -54,6 +54,8 @@
     <Compile Include="CBRWebService.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TranslitUA.cs" />
+    <Compile Include="TranslitRU.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Core-AddIn.dna" />

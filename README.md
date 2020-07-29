@@ -27,7 +27,7 @@ BypassCache=true - a request to cbr.ru should be made at each function call, oth
 Returns MD5 hash of the input string.\
 \
 <b>string Translit(string input, string lang)</b>\
-Transliterates Russian-language string. Parameter lang can be either "RU" or "UA". Ukrainian transliteration uses a simplified version of a Russian algorithm.\
+Transliterates a Cyrillic string. Parameter lang can be either "RU" or "UA". Ukrainian transliteration uses a simplified version of a Russian algorithm.\
 \
 \
 <b><u>Commands:</u></b>\

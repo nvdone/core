@@ -31,7 +31,6 @@ namespace Core
 		private static ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>> cbrFXRateCache = new ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>>();
 
 		private static TranslitRU translitRU = new TranslitRU();
-
 		private static TranslitUA translitUA = new TranslitUA();
 
 		#region Functions
@@ -108,16 +107,15 @@ namespace Core
 			return string.Concat(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input)).Select(x => x.ToString("x2")));
 		}
 
-		[ExcelFunction(Description = "TranslitRU(string input)", IsThreadSafe = true)]
-		public static string TranslitRU(string input)
+		[ExcelFunction(Description = "Translit(string input, string lang)", IsThreadSafe = true)]
+		public static string Translit(string input, string lang)
 		{
-			return translitRU.Transliterate(input);
-		}
+			Translit translit = translitRU;
 
-		[ExcelFunction(Description = "TranslitUA(string input)", IsThreadSafe = true)]
-		public static string TranslitUA(string input)
-		{
-			return translitUA.Transliterate(input);
+			if (lang.Equals("ua", StringComparison.InvariantCultureIgnoreCase))
+				translit = translitUA;
+
+			return translit.Transliterate(input);
 		}
 
 		[ExcelFunction(Description = "CoreAbout()", IsThreadSafe = true)]

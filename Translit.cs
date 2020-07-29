@@ -13,10 +13,16 @@
 //along with this program.If not, see<https://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace Core
 {
-	class TranslitRU
+	interface Translit
+	{
+		string Transliterate(string src);
+	}
+
+	class TranslitRU : Translit
 	{
 		private Dictionary<string, string> alpha;
 		private Dictionary<string, string> nonvowels;
@@ -157,7 +163,8 @@ namespace Core
 		{
 			string chr = "";
 			string pchr = "";
-			string dest = "";
+
+			StringBuilder dest = new StringBuilder();
 
 			for (int i = 0; i < src.Length; i++)
 			{
@@ -167,7 +174,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "ye";
+						dest.Append("ye");
 						continue;
 					}
 
@@ -175,17 +182,17 @@ namespace Core
 
 					if ((pchr == " ") || (pchr == "."))
 					{
-						dest += "ye";
+						dest.Append("ye");
 						continue;
 					}
 
 					if (nonvowels.ContainsKey(pchr))
 					{
-						dest += "e";
+						dest.Append("e");
 						continue;
 					}
 
-					dest += "ye";
+					dest.Append("ye");
 					continue;
 				}
 
@@ -193,7 +200,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "yo";
+						dest.Append("yo");
 						continue;
 					}
 
@@ -201,23 +208,23 @@ namespace Core
 
 					if ((pchr == " ") || (pchr == "."))
 					{
-						dest += "yo";
+						dest.Append("yo");
 						continue;
 					}
 
 					if (zhishi.ContainsKey(pchr))
 					{
-						dest += "e";
+						dest.Append("e");
 						continue;
 					}
 
 					if (nonvowels.ContainsKey(pchr))
 					{
-						dest += "ye";
+						dest.Append("ye");
 						continue;
 					}
 
-					dest += "yo";
+					dest.Append("yo");
 					continue;
 
 				}
@@ -226,7 +233,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "i";
+						dest.Append("i");
 						continue;
 					}
 
@@ -234,11 +241,11 @@ namespace Core
 
 					if ((pchr == "ь") || (pchr == "Ь"))
 					{
-						dest += "yi";
+						dest.Append("yi");
 						continue;
 					}
 
-					dest += "i";
+					dest.Append("i");
 					continue;
 				}
 
@@ -246,7 +253,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "Ye";
+						dest.Append("Ye");
 						continue;
 					}
 
@@ -254,17 +261,17 @@ namespace Core
 
 					if ((pchr == " ") || (pchr == "."))
 					{
-						dest += "Ye";
+						dest.Append("Ye");
 						continue;
 					}
 
 					if (nonvowels.ContainsKey(pchr))
 					{
-						dest += "E";
+						dest.Append("E");
 						continue;
 					}
 
-					dest += "Ye";
+					dest.Append("Ye");
 					continue;
 				}
 
@@ -272,7 +279,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "Yo";
+						dest.Append("Yo");
 						continue;
 					}
 
@@ -280,23 +287,23 @@ namespace Core
 
 					if ((pchr == " ") || (pchr == "."))
 					{
-						dest += "Yo";
+						dest.Append("Yo");
 						continue;
 					}
 
 					if (zhishi.ContainsKey(pchr))
 					{
-						dest += "E";
+						dest.Append("E");
 						continue;
 					}
 
 					if (nonvowels.ContainsKey(pchr))
 					{
-						dest += "Ye";
+						dest.Append("Ye");
 						continue;
 					}
 
-					dest += "Yo";
+					dest.Append("Yo");
 					continue;
 
 				}
@@ -305,7 +312,7 @@ namespace Core
 				{
 					if (i == 0)
 					{
-						dest += "I";
+						dest.Append("I");
 						continue;
 					}
 
@@ -313,22 +320,275 @@ namespace Core
 
 					if ((pchr == "ь") || (pchr == "Ь"))
 					{
-						dest += "Yi";
+						dest.Append("Yi");
 						continue;
 					}
 
-					dest += "I";
+					dest.Append("I");
 					continue;
 				}
 
 				if (alpha.ContainsKey(chr))
 				{
-					dest += alpha[chr];
+					dest.Append(alpha[chr]);
 				}
 				else
-					dest += chr;
+					dest.Append(chr);
 			}
-			return dest;
+			return dest.ToString();
 		}
 	}
+
+	class TranslitUA : Translit
+	{
+		private Dictionary<string, string> alpha;
+		private Dictionary<string, string> nonvowels;
+		private Dictionary<string, string> zhishi;
+
+		public TranslitUA()
+		{
+			alpha = new Dictionary<string, string>
+			{
+				{"а", "a"},
+				{"б", "b"},
+				{"в", "v"},
+				{"г", "g"},
+				{"ґ", "g"},
+				{"д", "d"},
+				{"е", "e"},
+				{"є", "e"},
+				{"ж", "zh"},
+				{"з", "z"},
+				{"и", "i"},
+				{"і", "i"},
+				{"ї", "i"},
+				{"й", "y"},
+				{"к", "k"},
+				{"л", "l"},
+				{"м", "m"},
+				{"н", "n"},
+				{"о", "o"},
+				{"п", "p"},
+				{"р", "r"},
+				{"с", "s"},
+				{"т", "t"},
+				{"у", "u"},
+				{"ф", "f"},
+				{"х", "kh"},
+				{"ц", "ts"},
+				{"ч", "ch"},
+				{"ш", "sh"},
+				{"щ", "shch"},
+				{"ь", "'"},
+				{"ю", "yu"},
+				{"я", "ya"},
+				{"А", "A"},
+				{"Б", "B"},
+				{"В", "V"},
+				{"Г", "G"},
+				{"Ґ", "G"},
+				{"Д", "D"},
+				{"Е", "E"},
+				{"Є", "E"},
+				{"Ж", "Zh"},
+				{"З", "Z"},
+				{"И", "I"},
+				{"І", "I"},
+				{"Ї", "I"},
+				{"Й", "Y"},
+				{"К", "K"},
+				{"Л", "L"},
+				{"М", "M"},
+				{"Н", "N"},
+				{"О", "O"},
+				{"П", "P"},
+				{"Р", "R"},
+				{"С", "S"},
+				{"Т", "T"},
+				{"У", "U"},
+				{"Ф", "F"},
+				{"Х", "Kh"},
+				{"Ц", "Td"},
+				{"Ч", "Ch"},
+				{"Ш", "Sh"},
+				{"Щ", "Shch"},
+				{"Ь", "'"},
+				{"Ю", "Yu"},
+				{"Я", "Ya"},
+			};
+
+			nonvowels = new Dictionary<string, string>
+			{
+				{"б", "b"},
+				{"в", "v"},
+				{"г", "g"},
+				{"ґ", "g"},
+				{"д", "d"},
+				{"ж", "zh"},
+				{"з", "z"},
+				{"й", "y"},
+				{"к", "k"},
+				{"л", "l"},
+				{"м", "m"},
+				{"н", "n"},
+				{"п", "p"},
+				{"р", "r"},
+				{"с", "s"},
+				{"т", "t"},
+				{"ф", "f"},
+				{"х", "kh"},
+				{"ц", "ts"},
+				{"ч", "ch"},
+				{"ш", "sh"},
+				{"щ", "shch"},
+				{"Б", "B"},
+				{"В", "V"},
+				{"Г", "G"},
+				{"Ґ", "G"},
+				{"Д", "D"},
+				{"Ж", "Zh"},
+				{"З", "Z"},
+				{"Й", "Y"},
+				{"К", "K"},
+				{"Л", "L"},
+				{"М", "M"},
+				{"Н", "N"},
+				{"П", "P"},
+				{"Р", "R"},
+				{"С", "S"},
+				{"Т", "T"},
+				{"Ф", "F"},
+				{"Х", "Kh"},
+				{"Ц", "Ts"},
+				{"Ч", "Ch"},
+				{"Ш", "Sh"},
+				{"Щ", "Shch"}
+			};
+
+			zhishi = new Dictionary<string, string>
+			{
+				{"ж", "zh"},
+				{"ч", "ch"},
+				{"ш", "sh"},
+				{"щ", "shch"},
+				{"Ж", "Zh"},
+				{"Ч", "Ch"},
+				{"Ш", "Sh"},
+				{"Щ", "Shch"}
+			};
+
+		}
+		public string Transliterate(string src)
+		{
+			string chr = "";
+			string pchr = "";
+			StringBuilder dest = new StringBuilder();
+
+			for (int i = 0; i < src.Length; i++)
+			{
+				chr = src.Substring(i, 1);
+
+				if (chr == "е")
+				{
+					if (i == 0)
+					{
+						dest.Append("ye");
+						continue;
+					}
+
+					pchr = src.Substring(i - 1, 1);
+
+					if ((pchr == " ") || (pchr == "."))
+					{
+						dest.Append("ye");
+						continue;
+					}
+
+					if (nonvowels.ContainsKey(pchr))
+					{
+						dest.Append("e");
+						continue;
+					}
+
+					dest.Append("ye");
+					continue;
+				}
+
+				if (chr == "и" || chr == "і" || chr == "ї")
+				{
+					if (i == 0)
+					{
+						dest.Append("i");
+						continue;
+					}
+
+					pchr = src.Substring(i - 1, 1);
+
+					if ((pchr == "ь") || (pchr == "Ь"))
+					{
+						dest.Append("yi");
+						continue;
+					}
+
+					dest.Append("i");
+					continue;
+				}
+
+				if (chr == "Е")
+				{
+					if (i == 0)
+					{
+						dest.Append("Ye");
+						continue;
+					}
+
+					pchr = src.Substring(i - 1, 1);
+
+					if ((pchr == " ") || (pchr == "."))
+					{
+						dest.Append("Ye");
+						continue;
+					}
+
+					if (nonvowels.ContainsKey(pchr))
+					{
+						dest.Append("E");
+						continue;
+					}
+
+					dest.Append("Ye");
+					continue;
+				}
+
+				if (chr == "И" || chr == "І" || chr == "Ї")
+				{
+					if (i == 0)
+					{
+						dest.Append("I");
+						continue;
+					}
+
+					pchr = src.Substring(i - 1, 1);
+
+					if ((pchr == "ь") || (pchr == "Ь"))
+					{
+						dest.Append("Yi");
+						continue;
+					}
+
+					dest.Append("I");
+					continue;
+				}
+
+				if (alpha.ContainsKey(chr))
+				{
+					dest.Append(alpha[chr]);
+				}
+				else
+					dest.Append(chr);
+			}
+			return dest.ToString();
+		}
+	}
+
 }

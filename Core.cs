@@ -30,6 +30,12 @@ namespace Core
 	{
 		private static ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>> cbrFXRateCache = new ConcurrentDictionary<string, ConcurrentDictionary<DateTime, decimal>>();
 
+		private static TranslitRU translitRU = new TranslitRU();
+
+		private static TranslitUA translitUA = new TranslitUA();
+
+		#region Functions
+
 		[ExcelFunction(Description = "RegExIsMatch", IsThreadSafe = true)]
 		public static bool RegExIsMatch(string input, string pattern)
 		{
@@ -105,13 +111,13 @@ namespace Core
 		[ExcelFunction(Description = "TranslitRU(string input)", IsThreadSafe = true)]
 		public static string TranslitRU(string input)
 		{
-			return new TranslitRU().Transliterate(input);
+			return translitRU.Transliterate(input);
 		}
 
 		[ExcelFunction(Description = "TranslitUA(string input)", IsThreadSafe = true)]
 		public static string TranslitUA(string input)
 		{
-			return new TranslitUA().Transliterate(input);
+			return translitUA.Transliterate(input);
 		}
 
 		[ExcelFunction(Description = "CoreAbout()", IsThreadSafe = true)]
@@ -120,6 +126,10 @@ namespace Core
 			Assembly executingAssembly = Assembly.GetExecutingAssembly();
 			return ((AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyDescriptionAttribute))).Description + " " + executingAssembly.GetName().Version.ToString() + ", " + ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyCopyrightAttribute))).Copyright;
 		}
+
+		#endregion
+
+		#region Commands
 
 		[ExcelCommand(Description = "Switch reference style between R1C1 and A1.")]
 		public static void SwitchReferenceStyle()
@@ -151,5 +161,7 @@ namespace Core
 		{
 			cbrFXRateCache.Clear();
 		}
+
+		#endregion
 	}
 }
